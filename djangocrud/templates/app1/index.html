@@ -1,0 +1,72 @@
+{% extends 'app1/base.html' %} {% block content %}
+<div class="container">
+  <!-- Display Success or Error Messages -->
+  {% if messages %}
+  <ul class="list-unstyled">
+    {% for message in messages %}
+    <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <!-- Forms  -->
+  <div class="row">
+    <div class="col col-8 offset-2">
+      <h3 class="alert alert-warning text-center">
+        Employee Registration Form
+      </h3>
+      <div
+        class="p-4"
+        style="
+          background-color: #f8f9fa;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <form method="post">
+          {% csrf_token %} {{ form.as_p }}
+          <input type="submit" value="Submit" class="btn btn-primary" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Display Data -->
+<br /><br /><br />
+<h3 class="alert alert-warning text-center">Employee Records</h3>
+<table class="table my-5">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">S.No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Password</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in data %}
+    <tr>
+      <th scope="row">{{ i.id }}</th>
+      <td>{{ i.name }}</td>
+      <td>{{ i.email }}</td>
+      <td>{{ i.password }}</td>
+      <td>
+        <!-- Update icon -->
+        <a href="{% url 'update' i.id %}">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+        <!-- Delete Icon -->
+        <form action="{% url 'delete' i.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
